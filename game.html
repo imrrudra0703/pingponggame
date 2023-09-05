@@ -1,0 +1,111 @@
+<html>
+<head>
+     <meta charset = "utf-8"/>
+
+     <title>Ball Game</title>
+
+     <style>
+          canvas { background:yellow; display: block; margin: 0 auto; }
+     </style>
+
+</head>
+<body>
+     <p><font size="25" color="black"><center>PING-PONG BALL GAME</center></font></p>
+     <canvas id="gamecanvas" width="600" height="500" style="border:1px solid #000000;">
+     </canvas>
+     <script>
+
+     var mycanvas = document.getElementById("gamecanvas");
+     var ctx = mycanvas.getContext("2d");
+
+     var radius = 30;
+     var x = 200;
+     var y = 400;
+
+     var dx = 2;
+     var dy = -2;
+
+     var boxw = 80;
+     var boxh = 15;
+     var bXaxis = 250;
+
+     var rightbuttonpressed = false;
+     var leftbuttonpressed = false;
+
+     document.addEventListener("keydown", keyLeftHandler, false);
+     document.addEventListener("keyup", keyRightHandler, false);
+
+     function keyLeftHandler(e) {
+          if(e.key == "Right" || e.key == "ArrowRight") {
+               rightbuttonpressed = true;
+          }
+          else if(e.key == "Left" || e.key == "ArrowLeft") {
+               leftbuttonpressed = true;
+          }
+     }
+
+     function keyRightHandler(e) {
+          if(e.key == "Right" || e.key == "ArrowRight") {
+               rightbuttonpressed = false;
+          }
+          else if(e.key == "Left" || e.key == "ArrowLeft") {
+               leftbuttonpressed = false;
+          }
+     }
+
+     function moveball()
+     {
+          
+          ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);
+
+          //drawing circle
+          ctx.beginPath();
+          ctx.arc(x, y, radius, 0, Math.PI*2);
+          ctx.fillStyle = "orange";
+          ctx.fill();
+          ctx.closePath();
+
+          //drawing box
+          ctx.beginPath();
+          ctx.rect(bXaxis, mycanvas.height-boxh, boxw, boxh);
+          ctx.fillStyle ="green";
+          ctx.fill();
+          ctx.closePath();
+
+          if(x + dx > mycanvas.width-radius || x + dx < radius) 
+          {
+               dx = -dx;
+          }
+          if(y+dy < radius) 
+          {
+               dy = -dy;
+          }
+          else if(y + dy > mycanvas.height-radius)
+          {
+               if(x > bXaxis && x < bXaxis + boxw) 
+               {
+                    dy = -dy;
+               }
+               else
+               {
+                    alert("GAME OVER");
+                    document.location.reload();
+                    clearInterval(interval);
+               }
+          }
+
+          if(rightbuttonpressed && bXaxis < mycanvas.width-boxw) {
+               bXaxis += 7;
+          }
+          else if(leftbuttonpressed && bXaxis > 0) {
+               bXaxis -= 7;
+          }
+
+          x += dx;
+          y += dy;
+
+}
+setInterval(moveball, 10);
+</script>
+</body>
+</html>
